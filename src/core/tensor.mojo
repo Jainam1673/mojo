@@ -1,11 +1,17 @@
 """
 Core Tensor Implementation
-High-performance N-dimensional array with SIMD vectorization and zero-copy operations.
+High-performance N-dimensional array with SIMD vectorizat        self.shape = existing.shape
+        self.size = existing.size
+        self.data = UnsafePointer[Scalar[dtype]].alloc(self.size)
+        self.owns_data = True
+        
+        # Copy data
+        memcpy(self.data, existing.data, self.size) zero-copy operations.
 """
 
 from memory import UnsafePointer, memset_zero, memcpy
 from algorithm import vectorize, parallelize
-from sys import simdwidthof
+from sys import simd_width_of
 from .shape import TensorShape
 from .dtype import get_simd_width, dtype_size, dtype_name
 
@@ -33,7 +39,7 @@ struct Tensor[dtype: DType]:
     var size: Int
     var owns_data: Bool
     
-    fn __init__(inout self, *dims: Int):
+    fn __init__(out self, *dims: Int):
         """Create a new tensor with the given dimensions.
         
         Allocates memory and initializes to zero.
@@ -49,7 +55,7 @@ struct Tensor[dtype: DType]:
         # Initialize to zero
         memset_zero(self.data, self.size)
     
-    fn __init__(inout self, shape: TensorShape):
+    fn __init__(out self, shape: TensorShape):
         """Create a new tensor with the given shape.
         
         Args:
@@ -62,7 +68,7 @@ struct Tensor[dtype: DType]:
         
         memset_zero(self.data, self.size)
     
-    fn __init__(inout self, shape: TensorShape, data: UnsafePointer[Scalar[dtype]], owns_data: Bool = False):
+    fn __init__(out self, shape: TensorShape, data: UnsafePointer[Scalar[dtype]], owns_data: Bool = False):
         """Create a tensor view over existing data (zero-copy).
         
         Args:
@@ -75,24 +81,24 @@ struct Tensor[dtype: DType]:
         self.data = data
         self.owns_data = owns_data
     
-    fn __del__(owned self):
+    fn __del__(self):
         """Free memory if this tensor owns its data."""
         if self.owns_data:
             self.data.free()
     
-    fn __copyinit__(inout self, other: Self):
+    fn __copyinit__(out self, existing: Self):
         """Deep copy constructor.
         
         Args:
-            other: The tensor to copy from
+            existing: The tensor to copy from
         """
-        self.shape = other.shape
-        self.size = other.size
+        self.shape = existing.shape
+        self.size = existing.size
         self.data = UnsafePointer[Scalar[dtype]].alloc(self.size)
         self.owns_data = True
         
         # Copy data
-        memcpy(self.data, other.data, self.size)
+        memcpy(self.data, existing.data, self.size)
     
     @always_inline
     fn __getitem__(self, indices: DynamicVector[Int]) -> Scalar[dtype]:
@@ -126,7 +132,7 @@ struct Tensor[dtype: DType]:
         Args:
             value: Value to fill with
         """
-        alias simd_width = simdwidthof[dtype]()
+        alias simd_width = simd_width_of[dtype]()
         
         @parameter
         fn fill_vectorized[width: Int](i: Int):

@@ -4,7 +4,7 @@ Matrix multiplication, dot products, and other linear algebra operations.
 """
 
 from algorithm import vectorize, parallelize
-from sys import simdwidthof
+from sys import simd_width_of
 from ..core.tensor import Tensor
 from ..core.shape import TensorShape
 
@@ -129,7 +129,7 @@ fn dot[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Scalar[dtype]:
     Returns:
         Scalar dot product
     """
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     var result = Scalar[dtype](0)
     
     # Vectorized dot product
@@ -212,7 +212,7 @@ fn norm[dtype: DType](tensor: Tensor[dtype], p: Int = 2) -> Scalar[dtype]:
     """
     if p == 2:
         # L2 norm (Euclidean)
-        alias simd_width = simdwidthof[dtype]()
+        alias simd_width = simd_width_of[dtype]()
         var sum_squared = Scalar[dtype](0)
         
         var num_vectors = tensor.size // simd_width

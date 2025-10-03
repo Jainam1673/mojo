@@ -4,7 +4,7 @@ Operations that reduce tensor dimensions (sum, mean, max, min, etc.)
 """
 
 from algorithm import vectorize
-from sys import simdwidthof
+from sys import simd_width_of
 from ..core.tensor import Tensor
 from math import max as math_max, min as math_min
 
@@ -19,7 +19,7 @@ fn sum[dtype: DType](tensor: Tensor[dtype]) -> Scalar[dtype]:
     Returns:
         Sum of all elements
     """
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     var total = Scalar[dtype](0)
     
     # Vectorized accumulation
@@ -62,7 +62,7 @@ fn max[dtype: DType](tensor: Tensor[dtype]) -> Scalar[dtype]:
     Returns:
         Maximum element
     """
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     var num_vectors = tensor.size // simd_width
     
     # Initialize with first value
@@ -96,7 +96,7 @@ fn min[dtype: DType](tensor: Tensor[dtype]) -> Scalar[dtype]:
     Returns:
         Minimum element
     """
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     var num_vectors = tensor.size // simd_width
     
     # Initialize with first value
@@ -135,7 +135,7 @@ fn variance[dtype: DType](tensor: Tensor[dtype]) -> Scalar[dtype]:
     var mu = mean(tensor)
     var sum_squared_diff = Scalar[dtype](0)
     
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn variance_vectorized[width: Int](i: Int):
@@ -173,7 +173,7 @@ fn prod[dtype: DType](tensor: Tensor[dtype]) -> Scalar[dtype]:
     Returns:
         Product of all elements
     """
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     var total = Scalar[dtype](1)
     
     # Vectorized multiplication

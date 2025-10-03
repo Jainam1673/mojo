@@ -3,7 +3,7 @@ Data Type System for MojoTensor
 Provides a flexible, type-safe system for numeric computations.
 """
 
-from sys import simdwidthof
+from sys import simd_width_of
 
 # Type aliases for common numeric types
 alias Float16 = DType.float16
@@ -31,7 +31,7 @@ fn get_simd_width[dtype: DType]() -> Int:
     Returns:
         Number of elements processable in one SIMD operation.
     """
-    return simdwidthof[dtype]()
+    return simd_width_of[dtype]()
 
 @always_inline
 fn dtype_size[dtype: DType]() -> Int:

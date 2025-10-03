@@ -4,7 +4,7 @@ SIMD-optimized operations that work element-by-element.
 """
 
 from algorithm import vectorize
-from sys import simdwidthof
+from sys import simd_width_of
 from ..core.tensor import Tensor
 from ..core.shape import broadcast_shapes
 
@@ -28,7 +28,7 @@ fn add[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
     # For now, assume same shape
     
     var result = Tensor[dtype](a.shape)
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn add_vectorized[width: Int](i: Int):
@@ -51,7 +51,7 @@ fn sub[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
         Result tensor (a - b)
     """
     var result = Tensor[dtype](a.shape)
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn sub_vectorized[width: Int](i: Int):
@@ -74,7 +74,7 @@ fn mul[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
         Result tensor (a * b)
     """
     var result = Tensor[dtype](a.shape)
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn mul_vectorized[width: Int](i: Int):
@@ -97,7 +97,7 @@ fn div[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
         Result tensor (a / b)
     """
     var result = Tensor[dtype](a.shape)
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn div_vectorized[width: Int](i: Int):
@@ -124,7 +124,7 @@ fn scalar_add[dtype: DType](tensor: Tensor[dtype], scalar: Scalar[dtype]) -> Ten
         Result tensor (tensor + scalar)
     """
     var result = Tensor[dtype](tensor.shape)
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn add_vectorized[width: Int](i: Int):
@@ -146,7 +146,7 @@ fn scalar_mul[dtype: DType](tensor: Tensor[dtype], scalar: Scalar[dtype]) -> Ten
         Result tensor (tensor * scalar)
     """
     var result = Tensor[dtype](tensor.shape)
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn mul_vectorized[width: Int](i: Int):
@@ -182,7 +182,7 @@ fn abs[dtype: DType](tensor: Tensor[dtype]) -> Tensor[dtype]:
         Result tensor (|tensor|)
     """
     var result = Tensor[dtype](tensor.shape)
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn abs_vectorized[width: Int](i: Int):
@@ -237,7 +237,7 @@ fn sqrt[dtype: DType](tensor: Tensor[dtype]) -> Tensor[dtype]:
         Result tensor (√tensor)
     """
     var result = Tensor[dtype](tensor.shape)
-    alias simd_width = simdwidthof[dtype]()
+    alias simd_width = simd_width_of[dtype]()
     
     @parameter
     fn sqrt_vectorized[width: Int](i: Int):

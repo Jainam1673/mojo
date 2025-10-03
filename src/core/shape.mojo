@@ -18,7 +18,7 @@ struct TensorShape:
     var dims: DynamicVector[Int]
     var strides: DynamicVector[Int]
     
-    fn __init__(inout self, *shape: Int):
+    fn __init__(out self, *shape: Int):
         """Initialize shape from variadic dimensions.
         
         Args:
@@ -35,7 +35,7 @@ struct TensorShape:
         # Calculate strides (row-major/C-order)
         self._compute_strides()
     
-    fn __init__(inout self, shape: DynamicVector[Int]):
+    fn __init__(out self, shape: DynamicVector[Int]):
         """Initialize shape from a vector of dimensions.
         
         Args:
