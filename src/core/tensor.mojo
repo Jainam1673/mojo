@@ -12,10 +12,11 @@ High-performance N-dimensional array with SIMD vectorizat        self.shape = ex
 from memory import UnsafePointer, memset_zero, memcpy
 from algorithm import vectorize, parallelize
 from sys import simd_width_of
+from collections import DynamicVector
 from .shape import TensorShape
 from .dtype import get_simd_width, dtype_size, dtype_name
 
-struct Tensor[dtype: DType]:
+struct Tensor[dtype: DType](Movable):
     """High-performance N-dimensional tensor with SIMD optimization.
     
     Key Features:
@@ -81,7 +82,7 @@ struct Tensor[dtype: DType]:
         self.data = data
         self.owns_data = owns_data
     
-    fn __del__(self):
+    fn __deinit__(var self):
         """Free memory if this tensor owns its data."""
         if self.owns_data:
             self.data.free()
